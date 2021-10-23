@@ -1,0 +1,6 @@
+name: ProjectDemonSlayer
+version: '${project.version}'
+main: hadences.projectdemonslayer.ProjectDemonSlayer
+api-version: 1.17
+authors: [ Hadences ]
+description: Minecraft Demon Slayer Plugin
