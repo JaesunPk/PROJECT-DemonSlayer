@@ -1,0 +1,9 @@
+Commands:
+    + ds create arena <name>
+    ds get <arena> setLobbySpawn
+    ds get <arena> setTeam1Spawn
+    ds get <arena> setTeam2Spawn
+    ds get <arena> addSpawnPoint
+    + ds arenalist
+    + ds reloadconfig
+    ds reload

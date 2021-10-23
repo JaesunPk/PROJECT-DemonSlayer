@@ -4,3 +4,7 @@ main: hadences.projectdemonslayer.ProjectDemonSlayer
 api-version: 1.17
 authors: [ Hadences ]
 description: Minecraft Demon Slayer Plugin
+commands:
+  ds:
+    usage: /ds <command>
+    description: main command line for the demon slayer project.
