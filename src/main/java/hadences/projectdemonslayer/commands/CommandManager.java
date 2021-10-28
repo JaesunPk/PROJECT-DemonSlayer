@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import static hadences.projectdemonslayer.arena.Arena.arenalist;
+import static hadences.projectdemonslayer.game.GameManager.console;
 
 public class CommandManager implements CommandExecutor {
     ProjectDemonSlayer ds = JavaPlugin.getPlugin(ProjectDemonSlayer.class);
@@ -63,6 +64,13 @@ public class CommandManager implements CommandExecutor {
             return true;
         }
 
+        // /ds endgame
+        else if(args.length == 1 && args[0].equalsIgnoreCase("endgame")){
+            console.getGamemodeManager().setEndGame(true);
+
+        }
+
+
         // /ds get <name> <command>
         else if(args.length == 3 && args[0].equalsIgnoreCase("get") && ArenaManager.ArenaNameInList(args[1])){
             // /ds get <name> setLobbySpawn
@@ -101,10 +109,12 @@ public class CommandManager implements CommandExecutor {
                 }
             }
 
-        }else{
+        }
+        else{
             p.sendMessage(Chat.getConsoleName() + ChatColor.RED + " Arena does not exist!");
             return true;
         }
+
 
 
         return false;

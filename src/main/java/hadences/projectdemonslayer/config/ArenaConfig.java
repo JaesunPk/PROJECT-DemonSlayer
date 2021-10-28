@@ -2,6 +2,7 @@ package hadences.projectdemonslayer.config;
 
 import hadences.projectdemonslayer.ProjectDemonSlayer;
 import hadences.projectdemonslayer.arena.Arena;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -53,11 +54,10 @@ public class ArenaConfig {
         try {
             if (!ds.getConfig().getConfigurationSection("Arenas").getKeys(false).isEmpty()){
                 for (String key : ds.getConfig().getConfigurationSection("Arenas").getKeys(false)) {
-
                     Name = ds.getConfig().get("Arenas." + key + ".NAME").toString();
                     LobbySpawn = new Location(getServer().getWorlds().get(0),(Double) ds.getConfig().get("Arenas." + key + ".LOBBYSPAWN.X"),(Double) ds.getConfig().get("Arenas." + key + ".LOBBYSPAWN.Y"),(Double) ds.getConfig().get("Arenas." + key + ".LOBBYSPAWN.Z"));
-                    t1spawn = new Location(getServer().getWorlds().get(0),(Double) ds.getConfig().get("Arenas." + key + ".TEAM1.X"),(Double) ds.getConfig().get("Arenas." + key + ".TEAM1.Y"),(Double) ds.getConfig().get("Arenas." + key + ".TEAM1.Z"));
-                    t2spawn = new Location(getServer().getWorlds().get(0),(Double) ds.getConfig().get("Arenas." + key + ".TEAM2.X"),(Double) ds.getConfig().get("Arenas." + key + ".TEAM2.Y"),(Double) ds.getConfig().get("Arenas." + key + ".TEAM2.Z"));
+                    t1spawn = new Location(getServer().getWorlds().get(0),(Double) ds.getConfig().get("Arenas." + key + ".TEAM1SPAWN.X"),(Double) ds.getConfig().get("Arenas." + key + ".TEAM1SPAWN.Y"),(Double) ds.getConfig().get("Arenas." + key + ".TEAM1SPAWN.Z"));
+                    t2spawn = new Location(getServer().getWorlds().get(0),(Double) ds.getConfig().get("Arenas." + key + ".TEAM2SPAWN.X"),(Double) ds.getConfig().get("Arenas." + key + ".TEAM2SPAWN.Y"),(Double) ds.getConfig().get("Arenas." + key + ".TEAM2SPAWN.Z"));
                     spawnpoints = new ArrayList<>();
                     Finalized = (Boolean) ds.getConfig().get("Arenas." + key + ".COMPLETE");
 
@@ -73,6 +73,16 @@ public class ArenaConfig {
             getServer().broadcastMessage("testing");
         }
 
+    }
+
+    public static ArrayList<Arena> getMaps(){
+        ArrayList<Arena> arenas = new ArrayList<>();
+        if(arenalist.keySet().isEmpty())
+            return null;
+        for(String key : arenalist.keySet()){
+            arenas.add(arenalist.get(key));
+        }
+        return arenas;
     }
 
 }

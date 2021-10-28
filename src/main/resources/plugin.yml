@@ -8,3 +8,6 @@ commands:
   ds:
     usage: /ds <command>
     description: main command line for the demon slayer project.
+  dev:
+    usage: /dev
+    description: toggles on dev mode.
