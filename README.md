@@ -1,5 +1,7 @@
 # Project Demon Slayer
 
+### Hadences is my IntelliJ account / This is a solo project ###
+
 Description :
 This project is a game developed in a game called Minecraft. This plugin essentially modifies the game Minecraft so that it functions as if its a different game.
 This plugin/modification allows players to utilize this plugin by hosting a server and play with their friends in a player vs player game (Work in Progress hence
