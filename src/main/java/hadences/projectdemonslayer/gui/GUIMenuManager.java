@@ -1,14 +1,11 @@
 package hadences.projectdemonslayer.gui;
 
 import hadences.projectdemonslayer.ProjectDemonSlayer;
-import hadences.projectdemonslayer.arena.Arena;
 import hadences.projectdemonslayer.chat.Chat;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -70,20 +67,20 @@ public class GUIMenuManager {
         try {
             if (!ds.getConfig().getConfigurationSection("Game.Gamemodes").getKeys(false).isEmpty()){
                 for (String key : ds.getConfig().getConfigurationSection("Game.Gamemodes").getKeys(false)) {
-                    GAMEMODE = new ItemStack(Material.getMaterial((String) ds.getConfig().get("Game.Gamemodes."+key)));
+                    GAMEMODE = new ItemStack(Material.getMaterial((String) ds.getConfig().get("Game.Gamemodes." + key + ".Item")));
                     meta = GAMEMODE.getItemMeta();
-                    meta.displayName(Component.text(ChatColor.AQUA + "[PlayGround]"));
+                    meta.displayName(Component.text(ChatColor.AQUA + key));
                     lore.clear();
                     lore.add(Component.text(Chat.format("&f+ &cClick to select gamemode!")));
                     meta.lore(lore);
-                    meta.setLocalizedName("playground");
+                    meta.setLocalizedName(key);
                     GAMEMODE.setItemMeta(meta);
                     GamemodeMenu.setItem(j,GAMEMODE);
                     j++;
                 }
             }
         }catch (Exception e){
-            getServer().broadcastMessage("testing");
+            getServer().broadcastMessage("Gamemode GUI");
         }
 
         //ITEM_CLOSE
@@ -304,7 +301,7 @@ public class GUIMenuManager {
                 }
             }
         }catch (Exception e){
-            getServer().broadcastMessage("testing");
+            getServer().broadcastMessage("Breathing Exception");
         }
 
         for(int j = i; j < 26; j++){

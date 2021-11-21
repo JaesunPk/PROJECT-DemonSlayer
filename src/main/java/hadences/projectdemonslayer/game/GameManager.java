@@ -8,6 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -16,11 +18,14 @@ import java.util.HashMap;
 
 import static hadences.projectdemonslayer.ability.Cooldown.*;
 import static hadences.projectdemonslayer.arena.Arena.arenalist;
+import static hadences.projectdemonslayer.game.gamemode.GamemodeManager.gamemodeListeners;
 import static hadences.projectdemonslayer.player.PlayerManager.playerdata;
+import static org.bukkit.Bukkit.getServer;
 
 public class GameManager {
     public static GameManager console;
     private ProjectDemonSlayer ds = ProjectDemonSlayer.getPlugin(ProjectDemonSlayer.class);
+
 
     //Lobby Variables
     private int PlayersNeeded;
@@ -88,38 +93,50 @@ public class GameManager {
                     updateTimer("-");
                     ds.board.showGameBoard();
                     //check if end game
-                    if(gamemodeManager.isEndGame()){
+                    if (gamemodeManager.isEndGame()) {
                         gamemodeManager.endgame();
+                        unregisterEvents();
                         this.cancel();
                     }
 
 
-
                 }
             }
-        }.runTaskTimer(ds,0,20L);
+        }.runTaskTimer(ds, 0, 20L);
 
 
     }
 
-    public static boolean checkPlayersInGame(){
-        for(Player p : Bukkit.getOnlinePlayers()){
-            if(playerdata.get(p.getUniqueId()).isIN_GAME() || playerdata.get(p.getUniqueId()).isIN_LOBBY()){
+    public void registerGamemodeEvents() {
+        getServer().getPluginManager().registerEvents((Listener) gamemodeManager, ProjectDemonSlayer.getPlugin(ProjectDemonSlayer.class));
+        gamemodeListeners.add((Listener) gamemodeManager);
+    }
+
+    public void unregisterEvents() {
+        for (Object l : gamemodeListeners) {
+            HandlerList.unregisterAll((Listener) l);
+        }
+        gamemodeListeners.clear();
+    }
+
+    public static boolean checkPlayersInGame() {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (playerdata.get(p.getUniqueId()).isIN_GAME() || playerdata.get(p.getUniqueId()).isIN_LOBBY()) {
                 return true;
             }
         }
         return false;
     }
 
-    public void addPlayersToGameList(Collection<? extends Player> playersList){
-        for(Player p : playersList){
+    public void addPlayersToGameList(Collection<? extends Player> playersList) {
+        for (Player p : playersList) {
             PlayerList.add(p);
         }
     }
 
-    public boolean checkAllPlayersReady(){
-        for(Player p : PlayerList){
-            if(!playerdata.get(p.getUniqueId()).IS_READY())
+    public boolean checkAllPlayersReady() {
+        for (Player p : PlayerList) {
+            if (!playerdata.get(p.getUniqueId()).IS_READY())
                 return false;
         }
         return true;
@@ -133,6 +150,7 @@ public class GameManager {
                     if(time == 6){
                         gamemodeManager.initialize(StartingStamina,StartingHealth,PlayerList);
                         start_after();
+                        registerGamemodeEvents();
                         this.cancel();
                     }
                     if(time == 0){
@@ -230,9 +248,10 @@ public class GameManager {
 
             p.sendActionBar(org.bukkit.ChatColor.GOLD + "<<< "
                     + org.bukkit.ChatColor.GRAY + "[" + org.bukkit.ChatColor.GOLD + "1" + org.bukkit.ChatColor.GRAY + "] : " + org.bukkit.ChatColor.RED + checkCD(p, cooldowns) + " "
-                    + org.bukkit.ChatColor.GRAY + "[" + org.bukkit.ChatColor.GOLD + "2" + org.bukkit.ChatColor.GRAY + "] : " +  org.bukkit.ChatColor.RED + checkCD(p, cooldowns2) + " "
-                    + org.bukkit.ChatColor.GRAY + "[" + org.bukkit.ChatColor.GOLD + "3" + org.bukkit.ChatColor.GRAY + "] : " +  org.bukkit.ChatColor.RED + checkCD(p, cooldowns3) + " "
-                    + org.bukkit.ChatColor.GRAY + "[" + org.bukkit.ChatColor.GOLD + "♦" + org.bukkit.ChatColor.GRAY + "] : " +  org.bukkit.ChatColor.YELLOW + playerdata.get(p.getUniqueId()).getSTAMINA() + " "
+                    + org.bukkit.ChatColor.GRAY + "[" + org.bukkit.ChatColor.GOLD + "2" + org.bukkit.ChatColor.GRAY + "] : " + org.bukkit.ChatColor.RED + checkCD(p, cooldowns2) + " "
+                    + org.bukkit.ChatColor.GRAY + "[" + org.bukkit.ChatColor.GOLD + "3" + org.bukkit.ChatColor.GRAY + "] : " + org.bukkit.ChatColor.RED + checkCD(p, cooldowns3) + " "
+                    + org.bukkit.ChatColor.GRAY + "[" + org.bukkit.ChatColor.GOLD + "RC" + org.bukkit.ChatColor.GRAY + "] : " + org.bukkit.ChatColor.RED + checkCD(p, cooldowns4) + " "
+                    + org.bukkit.ChatColor.GRAY + "[" + org.bukkit.ChatColor.GOLD + "♦" + org.bukkit.ChatColor.GRAY + "] : " + org.bukkit.ChatColor.YELLOW + playerdata.get(p.getUniqueId()).getSTAMINA() + " "
                     + org.bukkit.ChatColor.GOLD + " >>>");
         }
     }

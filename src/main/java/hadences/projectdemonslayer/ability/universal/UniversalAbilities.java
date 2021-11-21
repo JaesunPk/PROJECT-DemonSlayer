@@ -1,92 +1,87 @@
 package hadences.projectdemonslayer.ability.universal;
 
-import com.google.common.collect.ImmutableSet;
 import hadences.projectdemonslayer.ProjectDemonSlayer;
 import hadences.projectdemonslayer.utils.Damage;
-import hadences.projectdemonslayer.utils.Movement;
-import hadences.projectdemonslayer.utils.RaycastUtils;
-import hadences.projectdemonslayer.utils.VectorUtils;
+import hadences.projectdemonslayer.utils.RayTrace;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import static hadences.projectdemonslayer.utils.Damage.cleanTargetList;
 
 
 public class UniversalAbilities {
     ProjectDemonSlayer ds = ProjectDemonSlayer.getPlugin(ProjectDemonSlayer.class);
     private ArrayList<Entity> hitbox = new ArrayList<>();
+    private ArrayList<Location> particles = new ArrayList<>();
 
-
-    public void CastRCAbility(Player p){
+    public void CastRCAbility(Player p) {
         ability(p);
     }
 
-    public void ability(Player p){
-        particleEffect(p);
+    public void ability(Player p) {
+        Location peyeloc = p.getEyeLocation();
+        Location teleport = RayTrace(p, peyeloc);
+        //Movement.Dash(p,1,true,peyeloc);
+        playsound(p);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                p.teleport(teleport);
+
+            }
+        }.runTaskLater(ds, 1);
+        particleEffect();
     }
 
-    public void dealdamage(Player p,boolean left){
+    public Location RayTrace(Player p, Location loc) {
+        RayTrace rayTrace = new RayTrace(loc.toVector(), loc.getDirection());
+        ArrayList<Vector> positions = rayTrace.traverse(8, 0.01);
 
+        for (int i = 0; i < positions.size(); i++) {
+            Location position = positions.get(i).toLocation(p.getWorld());
+            Block block = p.getWorld().getBlockAt(position);
+
+            List<Entity> target = (List<Entity>) position.getNearbyEntities(1.2, 1.2, 1.2);
+            target = cleanTargetList(p, target, false);
+            if (target.size() >= 1) {
+                dealdamage(p, (ArrayList<Entity>) target);
+            }
+            particles.add(position);
+
+            if (block != null && block.getType() != Material.AIR) {
+                position.setYaw(loc.getYaw());
+                position.setPitch(loc.getPitch());
+                return position;
+            }
+            if (i == positions.size() - 1) {
+                position.setYaw(loc.getYaw());
+                position.setPitch(loc.getPitch());
+                return position;
+            }
+        }
+        return null;
     }
 
-    public void playsound(Player p){
-
+    public void dealdamage(Player p, ArrayList<Entity> entitylist) {
+        Damage.damageList(p, entitylist, (Double) ds.getConfig().get("Universal.Skills.Slash.Damage"));
     }
 
-    public void particleEffect(Player p) {
-        Location location = p.getEyeLocation().subtract(0,0.6,0);
-        float yaw = location.getYaw();
-        Vector pos;
-        double x;
-        double y;
-        double z;
+    public void playsound(Player p) {
+        p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.0f, 0.8f);
+    }
 
-        for(double t = Math.PI/6; t < 5*Math.PI/6; t += Math.PI/50){
-            x = 1.2*Math.sin(t)-0.4;
-            y = 0;
-            z = 1.5*Math.cos(t);
-            pos = new Vector(x,y,z);
-            pos = VectorUtils.rotateVector(pos,yaw,0);
-            location.getWorld().spawnParticle(Particle.REDSTONE, location.clone().add(pos), 20, 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(66, 171, 255), 0.6f));
-            x *= 1.2;
-            z *= 1.2;
-            pos = new Vector(x,y,z);
-            pos = VectorUtils.rotateVector(pos,yaw,0);
-            location.getWorld().spawnParticle(Particle.REDSTONE, location.clone().add(pos), 15, 0.05, 0.05, 0.05, 0, new Particle.DustOptions(Color.fromRGB(41, 98, 255), 1f));
-
-            x = 1.2*Math.sin(t)+0.9;
-            y = 0;
-            z = 2.5*Math.cos(t);
-            pos = new Vector(x,y,z);
-            pos = VectorUtils.rotateVector(pos,yaw,0);
-            location.getWorld().spawnParticle(Particle.REDSTONE, location.clone().add(pos), 20, 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(66, 171, 255), 0.6f));
-            x *= 1.08;
-            z *= 1.08;
-            pos = new Vector(x,y,z);
-            pos = VectorUtils.rotateVector(pos,yaw,0);
-            location.getWorld().spawnParticle(Particle.REDSTONE, location.clone().add(pos), 15, 0.05, 0.05, 0.05, 0, new Particle.DustOptions(Color.fromRGB(41, 98, 255), 1f));
+    public void particleEffect() {
+        for (Location location : particles) {
+            location.getWorld().spawnParticle(Particle.REDSTONE, location, 5, 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(164, 164, 164), 0.4f));
         }
-
-        for(double t = Math.PI/20; t < 7*Math.PI/6.8; t+=Math.PI/50){
-            pos = new Vector(1.5*Math.sin(t)*Math.sqrt(t) + 3, 0, 3.8*Math.cos(t));
-            pos = VectorUtils.rotateVector(pos,yaw,0);
-            location.getWorld().spawnParticle(Particle.CLOUD, location.clone().add(pos), 1, 0.15, 0.15, 0.15, 0.06);
-        }
-
-        for(double t = Math.PI/20; t < Math.PI; t += Math.PI/50){
-            x  = 1.5*Math.sin(t)*Math.sqrt(t)+3;
-            y = 0;
-            z = 3.8*Math.cos(t);
-            pos = new Vector(x,y,z);
-            pos = VectorUtils.rotateVector(pos,yaw,0);
-            location.getWorld().spawnParticle(Particle.REDSTONE, location.clone().add(pos), 20, 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(66, 171, 255), 0.6f));
-
-        }
-
-
+        particles.clear();
     }
 
 }

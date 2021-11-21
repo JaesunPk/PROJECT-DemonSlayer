@@ -6,7 +6,10 @@ import hadences.projectdemonslayer.chat.Chat;
 import hadences.projectdemonslayer.utils.Damage;
 import hadences.projectdemonslayer.utils.Movement;
 import hadences.projectdemonslayer.utils.VectorUtils;
-import org.bukkit.*;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -51,7 +54,7 @@ public class WaterThirdForm extends Ability {
             public void run() {
                 if(iterations >= 3)
                     this.cancel();
-                Movement.Dash(p,1);
+                Movement.Dash(p, 1, false, p.getEyeLocation());
                 playsound(p);
                 dealdamage(p,left);
                 particleEffect(p,left);

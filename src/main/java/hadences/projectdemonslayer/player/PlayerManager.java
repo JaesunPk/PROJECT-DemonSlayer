@@ -1,7 +1,6 @@
 package hadences.projectdemonslayer.player;
 
 import hadences.projectdemonslayer.ProjectDemonSlayer;
-import hadences.projectdemonslayer.ability.Ability;
 import hadences.projectdemonslayer.ability.Breathing;
 import hadences.projectdemonslayer.gui.GUIMenuManager;
 import org.bukkit.entity.Player;
@@ -24,10 +23,9 @@ public class PlayerManager {
     private int ABILITY1;
     private int ABILITY2;
     private int ABILITY3;
-    private Ability A1;
-    private Ability A2;
-    private Ability A3;
     private String TEAM;
+    private boolean AGILE;
+
 
     //GUI Information
     private GUIMenuManager guiMenuManager;
@@ -65,17 +63,26 @@ public class PlayerManager {
         guiMenuManager.createInventories();
         this.CAN_MOVE = true;
         this.TEAM = "";
+        this.AGILE = false;
     }
 
-    public String getAbilityName(int ability){
+    public String getAbilityName(int ability) {
         String name = "None";
-        for(String form : ds.getConfig().getConfigurationSection("Ability."+BREATHING.getName() + ".Forms").getKeys(false)){
-            if((Integer) ds.getConfig().get("Ability."+BREATHING.getName()+".Forms." + form + ".Classification") == ability){
-                return (String) ds.getConfig().get("Ability."+BREATHING.getName()+".Forms." + form + ".Name");
+        for (String form : ds.getConfig().getConfigurationSection("Ability." + BREATHING.getName() + ".Forms").getKeys(false)) {
+            if ((Integer) ds.getConfig().get("Ability." + BREATHING.getName() + ".Forms." + form + ".Classification") == ability) {
+                return (String) ds.getConfig().get("Ability." + BREATHING.getName() + ".Forms." + form + ".Name");
             }
         }
 
         return name;
+    }
+
+    public boolean isAGILE() {
+        return AGILE;
+    }
+
+    public void setAGILE(boolean AGILE) {
+        this.AGILE = AGILE;
     }
 
     public String getTEAM() {

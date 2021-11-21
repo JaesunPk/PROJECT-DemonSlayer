@@ -3,7 +3,6 @@ package hadences.projectdemonslayer;
 import hadences.projectdemonslayer.player.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -36,6 +35,8 @@ public class MainEvent implements Listener {
         if (playerdata.containsKey(p.getUniqueId())) {
             playerdata.remove(p.getUniqueId());
         }
+        // playerdata.put(p.getUniqueId(), new PlayerManager(p, 0));
+
 
         if (CheckPlayerInConfig(p)) {
             if (!playerdata.containsKey(p.getUniqueId())) {
@@ -46,7 +47,6 @@ public class MainEvent implements Listener {
             AddPlayerToConfig(p);
             playerdata.put(p.getUniqueId(), new PlayerManager(p, 0));
             init(p);
-
         }
     }
 

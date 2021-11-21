@@ -4,14 +4,19 @@ import hadences.projectdemonslayer.ProjectDemonSlayer;
 import hadences.projectdemonslayer.chat.Chat;
 import hadences.projectdemonslayer.item.GameItems;
 import hadences.projectdemonslayer.player.PlayerManager;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import static hadences.projectdemonslayer.game.GameManager.console;
 import static hadences.projectdemonslayer.gui.events.GUIEventManager.sendTitleToAll;
@@ -28,13 +33,14 @@ public class Playground extends GamemodeManager implements Listener {
     public void start() {
         PlayerManager pm;
         for(Player p : playerlist){
+            p.getInventory().setHeldItemSlot(3);
             pm = playerdata.get(p.getUniqueId());
             pm.setALIVE(true);
             pm.setIN_GAME(true);
             pm.setIN_LOBBY(false);
             pm.setABILITY_USAGE(true);
             pm.setCAN_MOVE(true);
-            gameItems.givePlayerGameItems(p);
+            gameItems.givePlayerGameItems(p, playerdata.get(p.getUniqueId()).getBREATHING().getBreathingCastManager().getCustomModelData());
         }
     }
 
@@ -124,6 +130,45 @@ public class Playground extends GamemodeManager implements Listener {
 
     public void setWinner(String winner) {
         Winner = winner;
+    }
+
+    public Location getRandomSpawnpoint() {
+        int random = new Random().nextInt(console.getSpawnpoints().size());
+        return console.getSpawnpoints().get(random);
+    }
+
+    @EventHandler
+    public void onDeathEvent(PlayerDeathEvent e) {
+        if (e.getEntity() instanceof Player) {
+            Player p = e.getEntity();
+            if (playerdata.get(p.getUniqueId()).isIN_GAME()) {
+                e.setCancelled(true);
+                p.sendTitle(ChatColor.DARK_RED + "[" + ChatColor.RED + "You have been slain.." + ChatColor.DARK_RED + "]", "");
+                p.setGameMode(GameMode.SPECTATOR);
+                playerdata.get(p.getUniqueId()).setABILITY_USAGE(false);
+            } else {
+                return;
+            }
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    p.getInventory().setHeldItemSlot(3);
+                    p.setMaxHealth(console.getStartingHealth());
+                    p.setHealth(console.getStartingHealth());
+                    p.setFoodLevel(20);
+                    p.setGameMode(GameMode.ADVENTURE);
+                    p.teleport(getRandomSpawnpoint());
+                    playerdata.get(p.getUniqueId()).setABILITY_USAGE(true);
+                    playerdata.get(p.getUniqueId()).setSTAMINA(console.getStartingStamina());
+                    p.sendTitle(ChatColor.DARK_RED + "[" + ChatColor.GREEN + "Respawned" + ChatColor.DARK_RED + "]", "");
+                    p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 2, 2);
+                }
+
+
+            }.runTaskLater(ProjectDemonSlayer.getPlugin(ProjectDemonSlayer.class), 100);
+
+        }
     }
 
 }

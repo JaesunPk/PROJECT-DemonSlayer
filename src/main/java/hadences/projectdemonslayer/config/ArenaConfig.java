@@ -2,7 +2,6 @@ package hadences.projectdemonslayer.config;
 
 import hadences.projectdemonslayer.ProjectDemonSlayer;
 import hadences.projectdemonslayer.arena.Arena;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -70,7 +69,7 @@ public class ArenaConfig {
                 }
             }
         }catch (Exception e){
-            getServer().broadcastMessage("testing");
+            getServer().broadcastMessage("arena error");
         }
 
     }

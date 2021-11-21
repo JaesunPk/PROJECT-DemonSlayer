@@ -35,22 +35,6 @@
                 <configuration>
                     <minimizeJar>false</minimizeJar>
                     <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
-                    <relocations>
-                        <!-- Other relocations can go here, e.g. bstats -->
-                        <relocation>
-                            <pattern>de.slikey</pattern>
-                            <shadedPattern>my.own.plugin.namespace.slikey</shadedPattern>
-                        </relocation>
-                    </relocations>
-                    <filters>
-                        <filter>
-                            <artifact>com.elmakers.mine.bukkit:EffectLib</artifact>
-                            <excludes>
-                                <exclude>plugin.yml</exclude>
-                                <exclude>META-INF/MANIFEST.MF</exclude>
-                            </excludes>
-                        </filter>
-                    </filters>
                 </configuration>
                 <executions>
                     <execution>
@@ -79,16 +63,6 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
-
-        <repository>
-            <id>Maven Central</id>
-            <url>https://repo1.maven.org/maven2/</url>
-        </repository>
-        <!-- Use this repository ONLY if you need snapshot builds -->
-        <repository>
-            <id>elMakers</id>
-            <url>http://maven.elmakers.com/repository/</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -97,13 +71,6 @@
             <artifactId>paper-api</artifactId>
             <version>1.17.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.elmakers.mine.bukkit</groupId>
-            <artifactId>EffectLib</artifactId>
-            <version>9.3</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

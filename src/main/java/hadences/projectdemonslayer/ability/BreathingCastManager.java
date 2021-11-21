@@ -6,6 +6,7 @@ public class BreathingCastManager {
     
     String type = "None";
     Ability ability;
+    private int CustomModelData;
 
     public void BreathingCastManager(String type) {
         this.type = type;
@@ -26,16 +27,20 @@ public class BreathingCastManager {
         return true;
     }
 
-    public boolean CastSecondForm(Player p){
+    public boolean CastSecondForm(Player p) {
 
         return true;
     }
 
-    public boolean CastThirdForm(Player p){
+    public boolean CastThirdForm(Player p) {
 
         return true;
     }
 
+    public int getCustomModelData() {
+        CustomModelData = 0;
+        return CustomModelData;
+    }
 
 
 }

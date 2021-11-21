@@ -2,20 +2,15 @@ package hadences.projectdemonslayer.game.gamemode;
 
 import hadences.projectdemonslayer.ProjectDemonSlayer;
 import hadences.projectdemonslayer.chat.Chat;
-import hadences.projectdemonslayer.item.GameItems;
-import hadences.projectdemonslayer.player.PlayerManager;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 
-import static hadences.projectdemonslayer.gui.events.GUIEventManager.sendTitleToAll;
-import static hadences.projectdemonslayer.player.PlayerManager.playerdata;
+
 
 public class GamemodeManager {
+    public static ArrayList<Listener> gamemodeListeners = new ArrayList<>();
     private ProjectDemonSlayer ds = ProjectDemonSlayer.getPlugin(ProjectDemonSlayer.class);
     private boolean endGame;
     private String Winner;

@@ -10,6 +10,7 @@ public class Cooldown {
     public static HashMap<String, Long> cooldowns = new HashMap<>();
     public static HashMap<String, Long> cooldowns2 = new HashMap<>();
     public static HashMap<String, Long> cooldowns3 = new HashMap<>();
+    public static HashMap<String, Long> cooldowns4 = new HashMap<>();
 
     public static boolean checkCD(Player p,HashMap<String ,Long> cd){
         return Check(p, cd);
@@ -28,9 +29,11 @@ public class Cooldown {
     }
 
 
-    public static void init(Player p){
-        cooldowns.put(p.getName(), System.currentTimeMillis() + (1* 1000));
+    public static void init(Player p) {
+        cooldowns.put(p.getName(), System.currentTimeMillis() + (1 * 1000));
         cooldowns2.put(p.getName(), System.currentTimeMillis() + (1 * 1000));
         cooldowns3.put(p.getName(), System.currentTimeMillis() + (1 * 1000));
+        cooldowns4.put(p.getName(), System.currentTimeMillis() + (1 * 1000));
+
     }
 }
