@@ -4,9 +4,7 @@ This plugin/modification allows players to utilize this plugin by hosting a serv
 no gamemodes are created at the moment). The plugin manages map creation, game creation, player class/role selection, custom skill slots, and manages the game itself. 
 
 How to access files:
-  click src
-  click main
-  click java/hadences/projectdemonslayer
+  click src | click main | click java/hadences/projectdemonslayer
 
 Usage :
 For this plugin to work, a player must know how to host a server and must have their network port forwarded. The game will work locally but not globally if not
