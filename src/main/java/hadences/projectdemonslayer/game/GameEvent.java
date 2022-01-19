@@ -32,6 +32,7 @@ public class GameEvent implements Listener {
     GameItems gameItems = new GameItems();
     UniversalAbilities universalAbilities = new UniversalAbilities();
 
+    //Katana off hand logic ; tests if the player has the weapon on its off hand. if it is on his off hand then the game will change the weapon texture/model. 
     @EventHandler
     public void KatanaOffHand(PlayerSwapHandItemsEvent e) {
         Player p = e.getPlayer();
@@ -166,6 +167,8 @@ public class GameEvent implements Listener {
         return 0;
     }
 
+    // use ability logic; this passes through the objects and allows the player to use different abilities based on the ability 1 2 and 3
+    //this is dependent on the slot that the player presses.
     public boolean useAbility(int slot, Player p) {
         if (slot == 0)
             playerdata.get(p.getUniqueId()).getBREATHING().getBreathingCastManager().getAbility(playerdata.get(p.getUniqueId()).getABILITY1()).CastAbility(p);
